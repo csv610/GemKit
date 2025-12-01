@@ -1,25 +1,44 @@
-# GemKit - Your Comprehensive Generative AI Toolkit
+# GemKit
 
-GemKit is a powerful, multi-modal toolkit designed to leverage the capabilities of Google's Gemini API across a wide range of applications. From analyzing complex documents and academic papers to processing audio, video, and images, GemKit provides both ready-to-use command-line tools and flexible Python modules for your generative AI projects.
+GemKit provides Python modules and command-line tools that integrate with Google's Gemini API. It includes tools for analyzing PDFs and academic papers, processing audio and video, and working with images.
 
-## Core Features
+## Objective
 
-- **Multi-modal Analysis**: Work with PDFs, audio files, videos, and images.
-- **Structured Output**: Leverage Pydantic for reliable, schema-driven outputs.
-- **Command-Line & Programmatic Use**: Use the tools directly from your terminal or import them into your own Python scripts.
-- **Extensible**: Built with a modular design that's easy to extend.
+GemKit enables developers and researchers to interact with various document and media types using AI without writing complex API integration code. Instead of building custom solutions for each use case, users can import modules or run command-line tools to:
+
+- Extract information and insights from PDF documents and research papers
+- Process and analyze audio, video, and image files
+- Generate structured outputs (JSON, reviews) that fit specific needs
+- Automate document analysis workflows
+
+## Why Use GemKit
+
+**For Researchers**: Quickly analyze academic papers, extract key findings, and generate structured review summaries without manual parsing.
+
+**For Developers**: Integrate multi-modal AI analysis into applications with minimal code. Use pre-built tools or import modules directly into Python projects.
+
+**For Organizations**: Automate document processing, content analysis, and knowledge extraction at scale.
+
+**For Teams**: Standardize how documents and media are processed across projects using consistent, reusable components.
+
+## Features
+
+- **Multi-modal support**: PDFs, audio files, videos, and images
+- **Structured output**: Uses Pydantic for schema-driven responses
+- **Command-line and programmatic interfaces**: Tools can be used from the terminal or imported into Python scripts
+- **Modular design**: Components can be used independently or combined
 
 ## Available Tools
 
 ### PDF & Paper Analysis
 
-A comprehensive toolkit for interacting with PDF documents using Google's Gemini API, with advanced structured output support for academic paper reviews.
+Tools for interacting with PDF documents using Google's Gemini API and generating academic paper reviews.
 
 ### 1. **PDF Paper Reviewer** (`gemkit/cli_paper_reviewer.py`)
-Integrated tool combining PDF chat and structured paper reviews.
+Tool that combines PDF chat with academic paper review generation.
 
 #### Review Command
-Generate a comprehensive academic paper review with structured output:
+Generate an academic paper review with structured output:
 ```bash
 python -m gemkit.cli_paper_reviewer review -i paper.pdf
 python -m gemkit.cli_paper_reviewer review -i paper.pdf --model gemini-1.5-pro
@@ -35,7 +54,7 @@ python -m gemkit.cli_paper_reviewer chat -i paper.pdf --model gemini-1.5-pro
 ```
 
 ### 2. **PDF Chat** (`gemkit/gemini_pdf_chat.py`)
-Lightweight PDF chat interface for casual questions and discussions.
+PDF chat interface for asking questions about document content.
 
 ```bash
 python -m gemkit.gemini_pdf_chat -i document.pdf
@@ -44,7 +63,7 @@ python -m gemkit.gemini_pdf_chat -i document.pdf --model gemini-1.5-pro
 ```
 
 ### 3. **Paper Reviewer** (`gemkit/paper_reviewer.py`)
-Pydantic models and logic for comprehensive academic paper reviews. Can be used programmatically or imported into other scripts.
+Pydantic models and functions for generating academic paper reviews. Can be imported and used in other scripts.
 
 ```python
 from gemkit.paper_reviewer import ComprehensivePaperReview, review_paper_with_gemini
@@ -158,17 +177,17 @@ export GEMINI_API_KEY="your-api-key-here"
 ## Architecture
 
 ### GeminiPDFChat Class
-- **Minimal, focused design** - Only handles PDF upload/chat
-- **Context manager support** - Automatic cleanup with `with` statement
-- **Flexible output** - Returns either plain text or structured Pydantic models
+Handles PDF uploads and chat interactions with the Gemini API.
 
-**Key Methods:**
+**Methods:**
 - `load_pdf(pdf_file)` - Upload and validate PDF
 - `generate_text(prompt, response_schema=None)` - Generate response with optional schema
 - `_delete_pdf()` - Clean up uploaded file
 
+Supports context manager usage for automatic cleanup.
+
 ### ComprehensivePaperReview Schema
-Comprehensive Pydantic model covering all aspects of academic paper review:
+Pydantic model for academic paper reviews. Includes the following sections:
 
 **Sections:**
 - `metadata` - Paper information
@@ -240,27 +259,13 @@ with GeminiPDFChat() as chat:
     print(summary.main_contribution)
 ```
 
-## Design Decisions
+## Design Notes
 
-### Simplicity First
-- Removed overcomplicated dynamic import logic
-- Removed dependency on `pydantic_prompt_generator`
-- Focused on core functionality
-
-### No State Management
-- `response_schema` passed per-request, not stored
-- No history tracking in base chat class
-- Stateless design for reliability
-
-### Flexible Output
-- Returns Pydantic models when schema provided
-- Returns plain text for unstructured queries
-- User controls output format
-
-### Clean CLI
-- Two main entry points: `review` and `chat`
-- Clear, concise examples
-- Consistent error handling
+- No state management - `response_schema` passed per-request, not stored
+- No history tracking in the base chat class
+- Returns Pydantic models when schema is provided, otherwise returns plain text
+- Two main CLI entry points: `review` and `chat`
+- Includes error handling for missing API keys, invalid PDFs, and connection errors
 
 ## API Models Supported
 
@@ -270,11 +275,11 @@ with GeminiPDFChat() as chat:
 
 ## Error Handling
 
-All scripts include comprehensive error handling:
-- Missing API key detection
-- Invalid PDF validation
-- Connection error recovery
-- Detailed logging to file and console
+Scripts include error handling for:
+- Missing API key
+- Invalid PDFs
+- Connection errors
+- Logging to file and console
 
 ## Logging
 
